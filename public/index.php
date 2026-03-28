@@ -24,7 +24,7 @@ $router->post('/login', '\App\Controllers\Auth\LoginController@store');
 // User routes
 $router->get('/', '\App\Controllers\User\UserController@index');
 $router->get('/home', '\App\Controllers\User\UserController@index');
-$router->get('/product/(.*)', 'App\Controllers\User\UserController@product');
+$router->get('/product/{id:[0-9]+}', 'App\Controllers\User\UserController@product');
 $router->get('/product-list', '\App\Controllers\User\UserController@productlist');
 $router->get('/product-list/{brand}', '\App\Controllers\User\UserController@productbrand');
 $router->get('/search', '\App\Controllers\User\UserController@search');
@@ -53,6 +53,8 @@ $router->post('/admin/brands/store', '\App\Controllers\Admin\BrandsController@st
 $router->get('/admin/brands/edit/(\d+)', '\App\Controllers\Admin\BrandsController@edit');
 $router->post('/admin/brands/update/(\d+)', '\App\Controllers\Admin\BrandsController@update');
 $router->post('/admin/brands/delete/(\d+)', '\App\Controllers\Admin\BrandsController@destroy');
+
+$router->get('/lab-sqli', '\App\Controllers\User\UserController@labSqli');
 
 $router->before('GET|POST', '/admin/.*', function () {
     if (!AUTHGUARD()->isAdmin()) {

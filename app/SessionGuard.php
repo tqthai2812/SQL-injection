@@ -11,11 +11,13 @@ class SessionGuard
 
   public function login(User $user, array $credentials)
   {
-    $verified = password_verify($credentials['password'], $user->password);
+    $verified = md5($credentials['password']) === $user->password;
+
     if ($verified) {
       $_SESSION['user_id'] = $user->id;
-      $_SESSION['user_role'] = $user->role; // 🔧 Lưu role vào session
+      $_SESSION['user_role'] = $user->role;
     }
+
     return $verified;
   }
 
@@ -27,14 +29,14 @@ class SessionGuard
     return $this->user;
   }
 
-public function logout()
+  public function logout()
   {
     $this->user = null;
     session_unset();
     session_destroy();
     if (session_status() !== PHP_SESSION_ACTIVE) {
       session_start();
-  }
+    }
     session_regenerate_id(true);
     $BrandModel = new Brand(PDO());
     $brands = $BrandModel->all();

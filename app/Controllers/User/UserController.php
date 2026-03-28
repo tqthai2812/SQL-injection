@@ -327,4 +327,43 @@ class UserController extends Controller
     header("Location: /cart");
     exit;
   }
+
+  public function labSqli()
+  {
+    // Lấy ID từ URL (mặc định là 1 nếu không có)
+    $id = isset($_GET['id']) ? $_GET['id'] : 1;
+
+    $product = null;
+    $sql_error = null;
+
+    try {
+      // 1. TỰ TẠO KẾT NỐI PDO ĐỘC LẬP TẠI ĐÂY
+      $host = '127.0.0.1';
+      $username = 'root';
+      $password = ''; // Thường XAMPP mặc định pass rỗng
+      $dbname = 'phonex'; // ⚠️ NHỚ THAY BẰNG TÊN DATABASE CHỨA BẢNG PHONES CỦA BẠN
+
+      // Khởi tạo PDO
+      $pdo = new \PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+      $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+      // 2. ĐOẠN CODE GÂY LỖI: Nối thẳng biến $id vào chuỗi SQL
+      $sql = "SELECT id, name, brand_id, price, discount_percent, image, origin, release_date, warranty, processor, storage, color, screen_size, screen_technology, resolution, created_at, updated_at FROM phones WHERE id = " . $id;
+
+      // 3. Thực thi truy vấn
+      $stmt = $pdo->query($sql);
+      if ($stmt) {
+        $product = $stmt->fetch(\PDO::FETCH_ASSOC);
+      }
+    } catch (\PDOException $e) {
+      // Bắt lỗi SQL để in ra View
+      $sql_error = $e->getMessage();
+    }
+
+    // Render ra view vulnerable_lab.php
+    echo $this->view->render('content/vulnerable_lab', [
+      'product' => $product,
+      'sql_error' => $sql_error
+    ]);
+  }
 }

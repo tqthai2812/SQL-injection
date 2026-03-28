@@ -83,7 +83,7 @@ class User
   {
     $this->email = $data['email'];
     $this->name = $data['name'];
-    $this->password = password_hash($data['password'], PASSWORD_DEFAULT);
+    $this->password = md5($data['password']);
     $this->role = $data['role'] ?? 'user';
     return $this;
   }
