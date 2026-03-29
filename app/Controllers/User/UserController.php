@@ -366,4 +366,42 @@ class UserController extends Controller
       'sql_error' => $sql_error
     ]);
   }
+
+  public function labSqli2()
+  {
+    // Lấy ID từ URL
+    $id = isset($_GET['id']) ? $_GET['id'] : 1;
+
+    $product = null;
+
+    try {
+      $host = '127.0.0.1';
+      $username = 'root';
+      $password = '';
+      $dbname = 'phonex';
+
+      $pdo = new \PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+
+      // QUAN TRỌNG: Vẫn để ERRMODE_EXCEPTION để dùng try-catch, 
+      // nhưng chúng ta sẽ KHÔNG in lỗi ra màn hình nữa.
+      $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+      // ĐOẠN CODE GÂY LỖI (Vulnerable)
+      $sql = "SELECT * FROM phones WHERE id = " . $id;
+
+      $stmt = $pdo->query($sql);
+      if ($stmt) {
+        $product = $stmt->fetch(\PDO::FETCH_ASSOC);
+      }
+    } catch (\PDOException $e) {
+      // KHÔNG gán lỗi vào biến $sql_error nữa
+      // Nếu có lỗi SQL (do payload tấn công), product sẽ vẫn là null
+      $product = null;
+    }
+
+    // Render ra view (Lưu ý: Không gửi biến sql_error sang view nữa)
+    echo $this->view->render('content/vulnerable2_lab', [
+      'product' => $product
+    ]);
+  }
 }

@@ -55,6 +55,7 @@ $router->post('/admin/brands/update/(\d+)', '\App\Controllers\Admin\BrandsContro
 $router->post('/admin/brands/delete/(\d+)', '\App\Controllers\Admin\BrandsController@destroy');
 
 $router->get('/lab-sqli', '\App\Controllers\User\UserController@labSqli');
+$router->get('/lab-sqli2', '\App\Controllers\User\UserController@labSqli2');
 
 $router->before('GET|POST', '/admin/.*', function () {
     if (!AUTHGUARD()->isAdmin()) {

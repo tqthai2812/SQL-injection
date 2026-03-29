@@ -123,7 +123,7 @@
               $discounted_price = $original_price - $discount_amount;
               ?>
               <div class="swiper-slide">
-                <a href="<?= '/lab-sqli?id=' . $this->e($phone['id']) ?>" class="col-hover card text-decoration-none pt-5 px-2 border-0" style="overflow: hidden;">
+                <a href="<?= '/lab-sqli2?id=' . $this->e($phone['id']) ?>" class="col-hover card text-decoration-none pt-5 px-2 border-0" style="overflow: hidden;">
                   <img src="<?= htmlspecialchars($phone['image']) ?>" class="card-img-top object-fit-contain" alt="<?= htmlspecialchars($phone['name']) ?>" style="height: 250px;">
                   <div class="card-body mt-4">
                     <p class="card-text mb-0 text-secondary text-decoration-line-through fs-6">
